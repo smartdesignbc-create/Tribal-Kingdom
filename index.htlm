@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tribal Kingdom — Functional Preview</title>
+<title>Tribal Kingdom</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,8 +13,10 @@
     --navy-950:#060F1E; --navy-900:#0A1930; --navy-800:#0F2038; --navy-700:#1B2E4C;
     --navy-600:#2C4468; --navy-500:#3E5C87; --navy-400:#5E76AB; --navy-300:#8698C0;
     --navy-200:#AEBBD6; --navy-100:#D6DDEB; --navy-50:#EEF1F7;
-    --gold-900:#2B2311; --gold-700:#7D6630; --gold-600:#A6873F; --gold-500:#C9A968;
-    --gold-400:#CFA94A; --gold-300:#DBBE76; --gold-200:#E7D4A3; --gold-100:#F3E9D0; --gold-50:#FBF7EE;
+    --gold-900:#3A2E0F; --gold-700:#8C6D25; --gold-600:#BD9636; --gold-500:#E0B84E;
+    --gold-400:#EFC968; --gold-300:#F4D98A; --gold-200:#F8E6B3; --gold-100:#FBF0D6; --gold-50:#FDF8ED;
+    --gold-shine:linear-gradient(135deg, #F6E2A0 0%, #E0B84E 45%, #BD9636 100%);
+    --navy-shine:linear-gradient(135deg, #1B2E4C 0%, #0A1930 60%, #060F1E 100%);
     --complete:#3F9C6D; --attention:#D6A339; --overdue:#C25450; --info:#4E7FBF;
   }
   *{box-sizing:border-box;}
@@ -22,12 +24,6 @@
   h1,h2,h3,h4{font-family:'Fraunces',serif; margin:0;}
   .mono{font-family:'IBM Plex Mono',monospace;}
 
-  .preview-bar{position:sticky; top:0; z-index:50; background:var(--navy-950); display:flex; align-items:center; gap:6px; padding:10px 12px; overflow-x:auto; -webkit-overflow-scrolling:touch; border-bottom:2px solid var(--gold-500);}
-  .preview-bar span.tag{color:var(--gold-400); font-size:11px; text-transform:uppercase; letter-spacing:.12em; padding:0 8px; white-space:nowrap; flex-shrink:0;}
-  .preview-bar button{flex-shrink:0; background:transparent; border:1px solid rgba(255,255,255,.18); color:#cfd6e4; font-family:'Inter',sans-serif; font-size:12.5px; padding:7px 13px; border-radius:999px; cursor:pointer; white-space:nowrap; transition:.15s;}
-  .preview-bar button.active{background:var(--gold-500); color:var(--navy-950); border-color:var(--gold-500); font-weight:600;}
-  .preview-bar button:hover:not(.active){border-color:var(--gold-400); color:#fff;}
-  .notice{background:var(--gold-50); border-bottom:1px solid var(--gold-200); color:var(--gold-900); font-size:12px; padding:8px 16px; text-align:center;}
 
   .screen{display:none;} .screen.active{display:block;}
   .glass-card{background:rgba(255,255,255,.7); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.6); border-radius:20px; box-shadow:0 8px 32px rgba(10,25,48,.12);}
@@ -35,16 +31,17 @@
   .gold-divider{height:1px; width:48px; background:var(--gold-500); margin:12px auto;}
 
   .login-wrap{min-height:88vh; position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 20px; background:radial-gradient(circle at 15% 0%, #1B2E4C 0%, #0A1930 45%, #060F1E 100%);}
-  .crest{width:80px; height:80px; border-radius:50%; border:1px solid rgba(201,169,104,.6); display:flex; align-items:center; justify-content:center; margin-bottom:28px; position:relative;}
-  .crest::before{content:'';position:absolute; inset:6px; border:1px solid rgba(201,169,104,.3); border-radius:50%;}
-  .crest span{color:var(--gold-400); font-family:'Fraunces',serif; font-size:22px; letter-spacing:.15em;}
+  .crest{width:80px; height:80px; border-radius:50%; border:1px solid var(--gold-400); display:flex; align-items:center; justify-content:center; margin-bottom:28px; position:relative; box-shadow:0 0 24px rgba(224,184,78,.35), inset 0 0 16px rgba(224,184,78,.08);}
+  .crest::before{content:'';position:absolute; inset:6px; border:1px solid rgba(224,184,78,.4); border-radius:50%;}
+  .crest span{background:var(--gold-shine); -webkit-background-clip:text; background-clip:text; color:transparent; font-family:'Fraunces',serif; font-size:22px; letter-spacing:.15em; filter:drop-shadow(0 0 6px rgba(224,184,78,.3));}
   .login-title{color:#fff; font-size:40px; font-weight:500; text-align:center;}
   .login-sub{color:var(--navy-200); font-size:12px; text-transform:uppercase; letter-spacing:.25em; text-align:center; margin:0;}
   .login-card{width:100%; max-width:420px; padding:36px 32px; margin-top:36px;}
   .login-card label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--navy-200); margin-bottom:6px; font-weight:500;}
   .login-card input{width:100%; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#fff; padding:12px 14px; border-radius:10px; font-size:14px; margin-bottom:18px; font-family:'Inter',sans-serif;}
   .login-card input::placeholder{color:var(--navy-300);}
-  .btn-gold{width:100%; background:var(--gold-500); color:var(--navy-950); border:none; padding:13px; border-radius:10px; font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:.05em; cursor:pointer;}
+  .btn-gold{width:100%; background:var(--gold-shine); color:var(--navy-950); border:none; padding:13px; border-radius:10px; font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.05em; cursor:pointer; box-shadow:0 6px 20px rgba(224,184,78,.35); transition:.2s;}
+  .btn-gold:hover{box-shadow:0 8px 26px rgba(224,184,78,.5); transform:translateY(-1px);}
   .login-footer{text-align:center; margin-top:32px; color:var(--navy-300); font-size:12px;}
   .login-footer .gold{color:var(--gold-400);}
 
@@ -57,21 +54,28 @@
   .sidebar .brand .names p:last-child{font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--navy-400);}
   .sidebar nav{flex:1; padding:6px 10px;}
   .sidebar nav a{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; font-size:13.5px; color:var(--navy-600); text-decoration:none; margin-bottom:2px; cursor:pointer;}
-  .sidebar nav a.current{background:var(--navy-900); color:#fff;}
+  .sidebar nav a.current{background:var(--navy-shine); color:#fff; box-shadow:inset 3px 0 0 var(--gold-500);}
   .sidebar nav a .dot{width:6px;height:6px;border-radius:50%;background:var(--navy-300); flex-shrink:0;}
   .sidebar nav a.current .dot{background:var(--gold-400);}
   .sidebar .foot{border-top:1px solid var(--navy-100); padding:14px 18px; font-size:10.5px; color:var(--navy-400);}
   .sidebar .foot .gold{color:var(--gold-600);}
 
   .main{flex:1; display:flex; flex-direction:column; min-width:0;}
-  .topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px 28px; border-bottom:1px solid var(--navy-100); background:rgba(255,255,255,.4); backdrop-filter:blur(20px); flex-wrap:wrap;}
-  .topbar h2{font-size:24px; font-weight:500;}
-  .topbar p{margin:4px 0 0; color:var(--navy-500); font-size:13.5px;}
-  .avatar{width:28px;height:28px;border-radius:50%;background:var(--navy-900); color:var(--gold-400); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600;}
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 28px; background:var(--navy-shine); flex-wrap:wrap; box-shadow:0 4px 20px rgba(6,15,30,.25);}
+  .topbar h2{font-size:24px; font-weight:500; color:#fff;}
+  .topbar p{margin:4px 0 0; color:var(--navy-200); font-size:13.5px;}
+  .avatar{width:30px;height:30px;border-radius:50%;background:var(--gold-shine); color:var(--navy-950); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; box-shadow:0 0 0 2px rgba(255,255,255,.15);}
   .content{padding:24px 28px; flex:1;}
 
   .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px;}
-  .stat-card{display:flex; align-items:center; gap:14px; padding:18px;}
+  .hero-banner{display:flex; align-items:center; justify-content:space-between; gap:20px; background:var(--navy-shine); border-radius:20px; padding:26px 30px; margin-bottom:22px; box-shadow:0 10px 30px rgba(6,15,30,.3); position:relative; overflow:hidden;}
+  .hero-banner::before{content:''; position:absolute; top:-40%; right:-10%; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle, rgba(224,184,78,.18) 0%, transparent 70%);}
+  .hero-eyebrow{color:var(--gold-400); font-size:11px; text-transform:uppercase; letter-spacing:.2em; margin:0 0 6px; font-weight:600;}
+  .hero-title{color:#fff; font-size:26px; font-weight:500; margin:0;}
+  .hero-sub{color:var(--navy-200); font-size:13px; margin:6px 0 0;}
+  .hero-crest{width:56px; height:56px; border-radius:50%; border:1px solid var(--gold-400); display:flex; align-items:center; justify-content:center; color:var(--gold-400); font-family:'Fraunces',serif; font-size:16px; letter-spacing:.1em; flex-shrink:0; box-shadow:0 0 20px rgba(224,184,78,.25); position:relative; z-index:1;}
+  .stat-card{display:flex; align-items:center; gap:14px; padding:18px; transition:.2s; border-top:2px solid transparent;}
+  .stat-card:hover{border-top:2px solid var(--gold-500); transform:translateY(-2px); box-shadow:0 10px 24px rgba(10,25,48,.14);}
   .stat-icon{width:44px;height:44px;border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;}
   .stat-icon.info{background:rgba(78,127,191,.1); color:var(--info);}
   .stat-icon.overdue{background:rgba(194,84,80,.1); color:var(--overdue);}
@@ -84,7 +88,8 @@
   .row-2col{display:grid; grid-template-columns:2fr 1fr; gap:20px; margin-bottom:20px;}
   .row-3col{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:20px;}
   .card-pad{padding:20px;}
-  .card-title{font-size:15.5px; font-weight:500; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;}
+  .card-title{font-size:15.5px; font-weight:500; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; padding-bottom:10px; border-bottom:1px solid var(--navy-50); position:relative;}
+  .card-title::after{content:''; position:absolute; left:0; bottom:-1px; width:36px; height:2px; background:var(--gold-shine);}
   .card-title a{font-size:12px; color:var(--gold-600); text-decoration:none; font-weight:600; cursor:pointer;}
 
   .list-item{border:1px solid var(--navy-50); background:rgba(255,255,255,.6); border-radius:12px; padding:12px 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;}
@@ -119,8 +124,10 @@
   .field input, .field select, .field textarea{width:100%; border:1px solid var(--navy-100); background:rgba(255,255,255,.8); padding:10px 12px; border-radius:10px; font-size:13.5px; font-family:'Inter',sans-serif; color:var(--navy-800);}
   .btn-row{display:flex; justify-content:flex-end; gap:10px; margin-top:16px; flex-wrap:wrap;}
   .btn-outline{background:transparent; border:1px solid var(--navy-100); color:var(--navy-600); padding:10px 16px; border-radius:10px; font-size:13px; cursor:pointer;}
-  .btn-primary{background:var(--navy-900); color:#fff; border:none; padding:10px 16px; border-radius:10px; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;}
-  .btn-gold-sm{background:var(--gold-500); color:var(--navy-950); border:none; padding:10px 18px; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer;}
+  .btn-primary{background:var(--navy-shine); color:#fff; border:none; padding:10px 16px; border-radius:10px; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 14px rgba(10,25,48,.25); transition:.2s;}
+  .btn-primary:hover{box-shadow:0 6px 18px rgba(10,25,48,.35); transform:translateY(-1px);}
+  .btn-gold-sm{background:var(--gold-shine); color:var(--navy-950); border:none; padding:10px 18px; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(224,184,78,.35); transition:.2s;}
+  .btn-gold-sm:hover{box-shadow:0 6px 18px rgba(224,184,78,.5); transform:translateY(-1px);}
   .photo-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:4px;}
   .photo-preview{display:flex; align-items:center; gap:10px; margin-top:10px;}
   .photo-preview img{width:56px; height:56px; object-fit:cover; border-radius:10px; border:1px solid var(--navy-100);}
@@ -149,7 +156,7 @@
     .app-shell{position:relative;}
     .sidebar{position:fixed; top:0; left:0; height:100%; z-index:40; transform:translateX(-100%); transition:transform .25s ease; box-shadow:0 0 40px rgba(0,0,0,.25); width:250px;}
     .sidebar.open{transform:translateX(0);}
-    .mobile-toggle{display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; border:1px solid var(--navy-100); background:rgba(255,255,255,.7); font-size:16px; cursor:pointer; color:var(--navy-700); flex-shrink:0;}
+    .mobile-toggle{display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.1); font-size:16px; cursor:pointer; color:#fff; flex-shrink:0;}
     .scrim{display:none; position:fixed; inset:0; background:rgba(6,15,30,.45); z-index:30;}
     .scrim.show{display:block;}
     .stat-grid{grid-template-columns:repeat(2,1fr);} .row-3col{grid-template-columns:1fr;} .summary-tiles{grid-template-columns:repeat(2,1fr);}
@@ -158,7 +165,9 @@
   }
   @media (max-width: 480px){
     .stat-grid{grid-template-columns:1fr 1fr;} .summary-tiles{grid-template-columns:1fr 1fr;} .action-grid{grid-template-columns:1fr;}
-    .login-card{padding:26px 20px;} .preview-bar span.tag{display:none;}
+    .login-card{padding:26px 20px;}
+    .hero-banner{flex-direction:column; align-items:flex-start; text-align:left; padding:22px;}
+    .hero-crest{position:absolute; top:20px; right:20px;}
     thead{display:none;} table, tbody, tr, td{display:block; width:100%;}
     tbody tr{border:1px solid var(--navy-50); border-radius:12px; margin-bottom:10px; padding:8px; background:rgba(255,255,255,.6);}
     tbody td{border-top:none; padding:4px 6px;}
@@ -167,18 +176,6 @@
 </style>
 </head>
 <body>
-
-<div class="notice">Interactive preview — add / edit / delete / photos all work live in this tab. Data resets if you reload (this is sample data, not yet connected to a saved database).</div>
-<div class="preview-bar" id="previewBar">
-  <span class="tag">Preview:</span>
-  <button data-screen="login" class="active">Login</button>
-  <button data-screen="dashboard">Dashboard</button>
-  <button data-screen="maintenance">Maintenance</button>
-  <button data-screen="inspections">Inspections</button>
-  <button data-screen="contractors">Contractors</button>
-  <button data-screen="deliveries">Deliveries</button>
-  <button data-screen="reports">Reports</button>
-</div>
 
 <section class="screen active" id="screen-login">
   <div class="login-wrap">
@@ -221,6 +218,14 @@
         <div class="avatar">B</div>
       </div>
       <div class="content">
+        <div class="hero-banner">
+          <div>
+            <p class="hero-eyebrow">Executive Overview</p>
+            <h3 class="hero-title">Good day, Brad</h3>
+            <p class="hero-sub">Here's where Tribal Kingdom stands across every property, right now.</p>
+          </div>
+          <div class="hero-crest">TK</div>
+        </div>
         <div class="stat-grid" id="statGrid"></div>
         <div class="row-2col">
           <div class="glass-card card-pad">
@@ -593,15 +598,11 @@ function cancelForm(id){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
-  document.querySelectorAll('.preview-bar button').forEach(b => b.classList.toggle('active', b.getAttribute('data-screen') === id));
   document.querySelectorAll('.sidebar').forEach(s => s.classList.remove('open'));
   document.querySelectorAll('.scrim').forEach(s => s.classList.remove('show'));
   window.scrollTo(0,0);
   renderAll();
 }
-document.querySelectorAll('.preview-bar button').forEach(btn=>{
-  btn.addEventListener('click', ()=> showScreen(btn.getAttribute('data-screen')));
-});
 function openSidebar(name){
   document.getElementById('sidebar-' + name).classList.add('open');
   document.querySelector('#screen-' + name + ' .scrim').classList.add('show');
